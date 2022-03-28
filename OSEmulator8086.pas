@@ -80,10 +80,10 @@ begin
   FBootSector[$07] := $CD;          //0007 INT        21
   FBootSector[$08] := $21;
 
-  //Set data segment to program entry code segment
+  //Set data segment to program entry code segment at CONVENTIONAL_MEMORY_SEGEMENT_2:0000, but should start at offset 0100, so (CONVENTIONAL_MEMORY_SEGEMENT_2 - 10):0100
   FBootSector[$09] := $B8;          //0009 MOV        AX, CONVENTIONAL_MEMORY_SEGEMENT_2
-  FBootSector[$0A] := Lo(CONVENTIONAL_MEMORY_SEGEMENT_2);
-  FBootSector[$0B] := Hi(CONVENTIONAL_MEMORY_SEGEMENT_2);
+  FBootSector[$0A] := Lo(CONVENTIONAL_MEMORY_SEGEMENT_2 - $10);
+  FBootSector[$0B] := Hi(CONVENTIONAL_MEMORY_SEGEMENT_2 - $10);
 
   FBootSector[$0C] := $50;          //000C PUSH       AX
   FBootSector[$0D] := $1F;          //000D POP        DS
