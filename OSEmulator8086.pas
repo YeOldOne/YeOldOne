@@ -14,13 +14,13 @@ uses
 type
   TCPU8086OS = class(TCPU8086EmulationCodeInterception)
   private const
-    IVT_SEGMENT                    = $0000;
-    OS_BOOT_SECTOR_SEGMENT         = $007C;
-    OS_BOOT_SECTOR_POINTER         = $0000;
-    CONVENTIONAL_MEMORY_SEGEMENT_1 = $0050;                                     //Map OS functions here (RMA) $00500 - $07BFF
-    CONVENTIONAL_MEMORY_SEGEMENT_2 = $07E0;                                     //Program space         (RMA) $07E00 - $7FFFF
+    IVT_SEGMENT                   = $0000;
+    OS_BOOT_SECTOR_SEGMENT        = $007C;
+    OS_BOOT_SECTOR_POINTER        = $0000;
+    CONVENTIONAL_MEMORY_SEGMENT_1 = $0050;                                      //Map OS functions here (RMA) $00500 - $07BFF
+    CONVENTIONAL_MEMORY_SEGMENT_2 = $07E0;                                      //Program space         (RMA) $07E00 - $7FFFF
   public const
-    EMU_OS_INTERRUPT_SEGMENT = CONVENTIONAL_MEMORY_SEGEMENT_1;
+    EMU_OS_INTERRUPT_SEGMENT = CONVENTIONAL_MEMORY_SEGMENT_1;
   strict private
     FMemory: PCPU8086Mem;
     FProgramTerminated: Boolean;
@@ -80,20 +80,20 @@ begin
   FBootSector[$07] := $CD;          //0007 INT        21
   FBootSector[$08] := $21;
 
-  //Set data segment to program entry code segment at CONVENTIONAL_MEMORY_SEGEMENT_2:0000, but should start at offset 0100, so (CONVENTIONAL_MEMORY_SEGEMENT_2 - 10):0100
-  FBootSector[$09] := $B8;          //0009 MOV        AX, CONVENTIONAL_MEMORY_SEGEMENT_2
-  FBootSector[$0A] := Lo(CONVENTIONAL_MEMORY_SEGEMENT_2 - $10);
-  FBootSector[$0B] := Hi(CONVENTIONAL_MEMORY_SEGEMENT_2 - $10);
+  //Set data segment to program entry code segment at CONVENTIONAL_MEMORY_SEGMENT_2:0000, but should start at offset 0100, so (CONVENTIONAL_MEMORY_SEGMENT_2 - 10):0100
+  FBootSector[$09] := $B8;          //0009 MOV        AX, CONVENTIONAL_MEMORY_SEGMENT_2
+  FBootSector[$0A] := Lo(CONVENTIONAL_MEMORY_SEGMENT_2 - $10);
+  FBootSector[$0B] := Hi(CONVENTIONAL_MEMORY_SEGMENT_2 - $10);
 
   FBootSector[$0C] := $50;          //000C PUSH       AX
   FBootSector[$0D] := $1F;          //000D POP        DS
 
-  //Jump to program entry at CONVENTIONAL_MEMORY_SEGEMENT_2:0000, but should start at offset 0100, so (CONVENTIONAL_MEMORY_SEGEMENT_2 - 10):0100
-  FBootSector[$0E] := $EA;          //000E JMP        (CONVENTIONAL_MEMORY_SEGEMENT_2 - 10):0100
+  //Jump to program entry at CONVENTIONAL_MEMORY_SEGMENT_2:0000, but should start at offset 0100, so (CONVENTIONAL_MEMORY_SEGMENT_2 - 10):0100
+  FBootSector[$0E] := $EA;          //000E JMP        (CONVENTIONAL_MEMORY_SEGMENT_2 - 10):0100
   FBootSector[$0F] := $00;
   FBootSector[$10] := $01;
-  FBootSector[$11] := Lo(CONVENTIONAL_MEMORY_SEGEMENT_2 - $10);
-  FBootSector[$12] := Hi(CONVENTIONAL_MEMORY_SEGEMENT_2 - $10);
+  FBootSector[$11] := Lo(CONVENTIONAL_MEMORY_SEGMENT_2 - $10);
+  FBootSector[$12] := Hi(CONVENTIONAL_MEMORY_SEGMENT_2 - $10);
 
   //String to display goes here at 0013
   OSString := AnsiString(OSInfo + #13#10'$');
@@ -171,7 +171,7 @@ procedure TCPU8086OS.LoadProgram(const ProgramData: TBytes);
 var
   EntryPoint: PWord;
 begin
-  EntryPoint := FMemory^.Address[CONVENTIONAL_MEMORY_SEGEMENT_2, $0000];
+  EntryPoint := FMemory^.Address[CONVENTIONAL_MEMORY_SEGMENT_2, $0000];
 
   Move(ProgramData[0], EntryPoint^, Length(ProgramData));
 end;
