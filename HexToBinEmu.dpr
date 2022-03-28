@@ -18,7 +18,7 @@ const                                         //Address  Instruction
                              $B2, $30,        //107      MOV      DL,30         ; Set DL to character '0'
                              $80, $D2, $00,   //109      ADC      DL,00         ; Add the carry flag to DL, this results in '0' or '1'
                              $B4, $02,        //10C      MOV      AH,02         ; Select INT 21 function 02: output character in DL
-                             $CD, $21,        //10E      INT      21            ; BIOS Interrupt INT 21
+                             $CD, $21,        //10E      INT      21            ; OS Interrupt INT 21
                              $E2, $F3,        //110      LOOPW    0105          ; Go back to address 105 and loop until CL = 0 | $F3 = -13 bytes relative offset
                              $CD, $20];       //112      INT      20            ; Terminate program
 
