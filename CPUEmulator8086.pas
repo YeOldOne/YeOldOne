@@ -179,6 +179,11 @@ begin
   //https://stackoverflow.com/questions/4004493/what-address-does-the-x86-begin-executing-at
   CS := $FFFF;                                                                  //Code Segment
   IP := $0000;                                                                  //Instruction Pointer
+
+  //Setup the stack at the last page of the conventional memory
+  //https://wiki.osdev.org/Memory_Map_(x86)
+  SS := $7000;
+  SP := $FFFF;
 end;
 
 {******************************************************************************}

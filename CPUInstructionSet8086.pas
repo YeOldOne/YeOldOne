@@ -224,8 +224,11 @@ var
   var
     Stack: PWord;
   begin
-    //Increase stack pointer
-    CPU^.SP := CPU^.SP + SizeOf(TCPU8086Register);
+    //Decrease stack pointer
+    CPU^.SP := CPU^.SP - SizeOf(TCPU8086Register);
+
+    if (CPU^.SP = 0) then
+      raise Exception.Create('Stack overflow');
 
     //Get stack address
     Stack := PWord(Mem^.Address[CPU^.SS, CPU^.SP]);                             //stack segment:stack pointer
@@ -244,8 +247,8 @@ var
     //Read value from stack address
     Result := Stack^;
 
-    //Decrease stack pointer
-    CPU^.SP := CPU^.SP - SizeOf(TCPU8086Register);
+    //Increase stack pointer
+    CPU^.SP := CPU^.SP + SizeOf(TCPU8086Register);
   end;
 
   procedure Push_CS;
