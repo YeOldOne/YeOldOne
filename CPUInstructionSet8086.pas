@@ -617,7 +617,7 @@ var
     //Get call offset
     Offset := CurrentInterrupt^;
 
-    //Get call segement
+    //Get call segment
     Inc(CurrentInterrupt);
     Segment := CurrentInterrupt^;
 
